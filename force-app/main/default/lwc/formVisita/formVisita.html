@@ -4,44 +4,44 @@
 
         <lightning-layout>
             <lightning-layout-item size="4">
-                <lightning-input label="Nombre" required value={form} onchange={onNameChange}></lightning-input>
+                <lightning-input label="Nombre" required value={firstName} onchange={onNameChange}></lightning-input>
             </lightning-layout-item>
             <lightning-layout-item size="4">
-                <lightning-input label="Apellidos" required value={form} onchange={onApellidosChange}></lightning-input>
+                <lightning-input label="Apellidos" required value={apellidos} onchange={onApellidosChange}></lightning-input>
             </lightning-layout-item>
             <lightning-layout-item size="4">
-                <lightning-input type="email" label="Email" value={form}></lightning-input>
-            </lightning-layout-item>
-        </lightning-layout>
-
-        <lightning-layout>
-            <lightning-layout-item size="4">
-                <lightning-input type="date" required label="Día Visita" value={form} onchange={onDiaChange}>
-                </lightning-input>
-
-            </lightning-layout-item>
-            <lightning-layout-item size="4">
-                <lightning-input type="time" required label="Hora Entrada" value={form} onchange={onHoraIniChange}>
-                </lightning-input>
-
-            </lightning-layout-item>
-            <lightning-layout-item size="4">
-                <lightning-input type="time" required label="Hora Salida" value={form} onchange={onHoraFinChange}>
-                </lightning-input>
+                <lightning-input type="email" label="Email" value={email} onchange={onEmailChange}></lightning-input>
             </lightning-layout-item>
         </lightning-layout>
 
         <lightning-layout>
             <lightning-layout-item size="4">
-                <lightning-input type="tel" label="Telefono" value={form}>
+                <lightning-input type="date" required label="Día Visita" value={fecha} onchange={onDiaChange}>
+                </lightning-input>
+
+            </lightning-layout-item>
+            <lightning-layout-item size="4">
+                <lightning-input type="time" required label="Hora Entrada" value={horaIni} onchange={onHoraIniChange}>
+                </lightning-input>
+
+            </lightning-layout-item>
+            <lightning-layout-item size="4">
+                <lightning-input type="time" required label="Hora Salida" value={horaFin} onchange={onHoraFinChange}>
+                </lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <lightning-layout>
+            <lightning-layout-item size="4">
+                <lightning-input type="tel" label="Telefono" value={cel} onchange={onTelChange}>
                 </lightning-input>
             </lightning-layout-item>
             <lightning-layout-item size="4">
-                <lightning-combobox label="Tipo de Identificación" required value={value} placeholder="Seleccione"
-                    options={optionsTipoId}></lightning-combobox>
+                <lightning-combobox label="Tipo de Identificación" onchange={onTipoIdentChange} required value={tipoId}
+                    placeholder="Seleccione" options={optionsTipoId}></lightning-combobox>
             </lightning-layout-item>
             <lightning-layout-item size="4">
-                <lightning-input label="Identificación" required value={form} onchange={onIdentChange}>
+                <lightning-input label="Identificación" required value={ident} onchange={onIdentChange}>
                 </lightning-input>
             </lightning-layout-item>
         </lightning-layout>
@@ -50,18 +50,20 @@
 
         <lightning-layout>
             <lightning-layout-item size="4">
-                <lightning-radio-group class="labelRadio" name="radioGroup" label="Raza" options={optionsRaza}
-                    value={value} type="button"></lightning-radio-group>
+                <lightning-radio-group class="labelRadio" onchange={onRazaChange} name="radioGroup" required
+                    label="Raza" options={optionsRaza} value={raza} type="button"></lightning-radio-group>
             </lightning-layout-item>
 
             <lightning-layout-item size="4">
-                <fieldset class="slds-form-element">
-                    <legend class="slds-form-element__label">Sexo</legend>
+                <fieldset class={getClassRadio}>
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">*</abbr>Sexo</label>
                     <div class="slds-form-element__control">
                         <lightning-layout>
                             <lightning-layout-item size="4">
                                 <span class="slds-radio">
-                                    <input type="radio" id="Masculino" value="Masculino" name="options" checked="" />
+                                    <input type="radio" onclick={onRadioValues} id="Masculino" value="Masculino"
+                                        name="options" />
                                     <label class="slds-radio__label" for="Masculino">
                                         <span class="slds-radio_faux"></span>
                                         <span class="slds-form-element__label">Masculino</span>
@@ -70,7 +72,8 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="4">
                                 <span class="slds-radio">
-                                    <input type="radio" id="Femenino" value="Femenino" name="options" />
+                                    <input type="radio" onclick={onRadioValues} id="Femenino" value="Femenino"
+                                        name="options" />
                                     <label class="slds-radio__label" for="Femenino">
                                         <span class="slds-radio_faux"></span>
                                         <span class="slds-form-element__label">Femenino</span>
@@ -79,7 +82,7 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="4">
                                 <span class="slds-radio">
-                                    <input type="radio" id="Otro" value="Otro" name="options" />
+                                    <input type="radio" onclick={onRadioValues} id="Otro" value="Otro" name="options" />
                                     <label class="slds-radio__label" for="Otro">
                                         <span class="slds-radio_faux"></span>
                                         <span class="slds-form-element__label">Otro</span>
@@ -88,38 +91,38 @@
                             </lightning-layout-item>
                         </lightning-layout>
                     </div>
+                    <template if:false={radioReq}>
+                        <div class="slds-form-element__help" id="error_01">Este campo es requerido</div>
+                    </template>
                 </fieldset>
+
             </lightning-layout-item>
 
             <lightning-layout-item size="4">
-                <c-lookup-field selection={initialSelection} errors={errors} object-name={pase} icon-type={iconPase}
-                    onsearch={handleSearchS} onselectionchange={handleSelectionChange} label="Pase"
+                <c-lookup-field selection={initialSelection} required-field="true" errors={errors} object-name={pase}
+                    icon-type={iconPase} onsearch={handleSearchS} onselectionchange={handleSelectionChange} label="Pase"
                     placeholder="Buscar Pase" is-multi-entry={isMultiEntry}>
                 </c-lookup-field>
             </lightning-layout-item>
         </lightning-layout>
 
         <lightning-layout>
-            <lightning-layout-item size="12">
-                <div class="slds-form-element">
-                    <c-lookup-field-multiple selection={initialSelection} errors={errors} object-name={responsable}
-                        icon-type={iconResp} onsearch={handleSearch} onselectionchange={handleSelectionChange}
-                        label="Responsables" placeholder="Buscar Responsables" is-multi-entry={isMultiEntryR}>
-                    </c-lookup-field-multiple>
-                </div>
-            </lightning-layout-item>
-        </lightning-layout>
-        <lightning-layout>
             <lightning-layout-item size="6">
-                <lightning-textarea label="Descripción" placeholder="Motivo de la visita"></lightning-textarea>
+                <c-multiple-select required-field="true" selection={initialSelectionR} errors={errorsR}
+                    object-name={responsable} icon-type={iconResp} onsearch={handleSearch}
+                    onselectionchange={handleSelectionChangeR} label="Responsables" placeholder="Buscar Responsables"
+                    is-multi-entry={isMultiEntryR}></c-multiple-select>
+                <lightning-textarea onchange={onDescChange} label="Descripción" value={descip} placeholder="Motivo de la visita">
+                </lightning-textarea>
                 <fieldset class="slds-form-element">
                     <legend class="slds-form-element__label">Pertenencias</legend>
                     <div class="slds-form-element__control">
                         <lightning-layout>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-50" value="checkbox-50" />
-                                    <label class="slds-checkbox__label" for="checkbox-50">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="mochila"
+                                        value="Mochila" />
+                                    <label class="slds-checkbox__label" for="mochila">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Mochila</span>
                                     </label>
@@ -127,17 +130,19 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-49" value="checkbox-49" checked="" />
-                                    <label class="slds-checkbox__label" for="checkbox-49">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="cedula"
+                                        value="Cédula" />
+                                    <label class="slds-checkbox__label" for="cedula">
                                         <span class="slds-checkbox_faux"></span>
-                                        <span class="slds-form-element__label">Identificación</span>
+                                        <span class="slds-form-element__label">Cédula</span>
                                     </label>
                                 </div>
                             </lightning-layout-item>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-51" value="checkbox-50" />
-                                    <label class="slds-checkbox__label" for="checkbox-50">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="caja"
+                                        value="Caja" />
+                                    <label class="slds-checkbox__label" for="caja">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Caja</span>
                                     </label>
@@ -145,8 +150,9 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-52" value="checkbox-50" />
-                                    <label class="slds-checkbox__label" for="checkbox-50">
+                                    <input type="checkbox"  onclick={onCheckValues} name="pertenencias" id="maleta"
+                                        value="Maleta" />
+                                    <label class="slds-checkbox__label" for="maleta">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Maleta</span>
                                     </label>
@@ -156,8 +162,9 @@
                         <lightning-layout>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-53" value="checkbox-50" />
-                                    <label class="slds-checkbox__label" for="checkbox-50">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="laptop"
+                                        value="Laptop" />
+                                    <label class="slds-checkbox__label" for="laptop">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Laptop</span>
                                     </label>
@@ -165,8 +172,9 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-48" value="checkbox-49" checked="" />
-                                    <label class="slds-checkbox__label" for="checkbox-49">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="celular"
+                                        value="Celular"  />
+                                    <label class="slds-checkbox__label" for="celular">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Celular</span>
                                     </label>
@@ -174,8 +182,9 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-54" value="checkbox-50" />
-                                    <label class="slds-checkbox__label" for="checkbox-50">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="tablet"
+                                        value="Tablet" />
+                                    <label class="slds-checkbox__label" for="tablet">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Tablet</span>
                                     </label>
@@ -183,8 +192,9 @@
                             </lightning-layout-item>
                             <lightning-layout-item size="3">
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name="pertenencias" id="checkbox-57" value="checkbox-50" />
-                                    <label class="slds-checkbox__label" for="checkbox-50">
+                                    <input type="checkbox" onclick={onCheckValues} name="pertenencias" id="comida"
+                                        value="Comida" />
+                                    <label class="slds-checkbox__label" for="comida">
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">Comida</span>
                                     </label>
@@ -192,11 +202,12 @@
                             </lightning-layout-item>
                         </lightning-layout>
                     </div>
-                </fieldset>            
+                </fieldset>
             </lightning-layout-item>
-            <lightning-layout-item size="6">
-                <lightning-dual-listbox name="impresion" label="Primera impresión" source-label="Disponibles"
-                    selected-label="Selecionados" options={optionsImpresion} onchange={handleChange}>
+            <lightning-layout-item size="6" padding="horizontal-large">
+                <lightning-dual-listbox class={getListBox} name="impresion" label="Primera impresión"
+                    source-label="Disponibles" selected-label="Selecionados" options={optionsImpresion}
+                    onchange={handleChangeListBox} value={impresion}>
                 </lightning-dual-listbox>
             </lightning-layout-item>
         </lightning-layout>

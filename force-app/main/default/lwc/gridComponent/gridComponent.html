@@ -1,7 +1,7 @@
 <template>
     <lightning-card>
         <template if:true={showModal}>
-            <c-modal onclosemodal={handleCloseModal}></c-modal>
+            <c-modal id-visita={idVisita} onclosemodal={handleCloseModal}></c-modal>
         </template>
 
         <div class="slds-card__body slds-card__body_inner">
@@ -15,91 +15,112 @@
                     <lightning-layout-item size="6" padding="around-small">
                         <lightning-button-icon icon-name="utility:new" onclick={handleOpenModal}
                             alternative-text="Nueva Visita" class="slds-m-left_xx-small"></lightning-button-icon>
-                        <lightning-button-icon icon-name="utility:refresh" onclick={handleOpenModal}
+                        <lightning-button-icon icon-name="utility:refresh" onclick={handleRefreshModal}
                             alternative-text="Refrescar" class="slds-m-left_xx-small"></lightning-button-icon>
                         <lightning-button-icon icon-name="utility:save" onclick={handleOpenModal}
                             alternative-text="Salvar" class="slds-m-left_xx-small"></lightning-button-icon>
                     </lightning-layout-item>
                 </lightning-layout>
             </div>
-            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-bottom_large">
-                <thead>
-                    <tr class="slds-text-title_caps">
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Name">Name</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Apellidos">Apellidos</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Teléfono">Teléfono</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Correo">Correo</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Identificación">Identificación</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Día Visita">Día Visita</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Hora Entrada">Hora Entrada</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Hora Salida">Hora Salida</div>
-                        </th>
-                        <th class="" scope="col">
-                            <div class="slds-truncate" title="Email">Acciones</div>
-                        </th>
-                    </tr>
-                </thead>
-                <template for:each={visitas.data} for:item="row" for:index="index">
-                    <tbody key={row.id}>
-                        <tr class="slds-hint-parent">
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Name}>{row.Name}</div>
+            <template if:true={visitas.data}>
+                <table
+                    class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-m-bottom_large">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name">Name</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Apellidos__c}>{row.Apellidos__c}</div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Teléfono">Teléfono</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Telefono__c}>{row.Telefono__c}</div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Correo">Correo</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Email_Visita__c}>{row.Email_Visita__c}</div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Identificación">Identificación</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.CI__c}>{row.CI__c}</div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Día Visita">Día Visita</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Fecha_Visita__c}>                                       
-                                    <lightning-formatted-date-time value={row.Fecha_Visita__c} year="numeric"
-                                        month="numeric" day="numeric" time-zone="UTC"></lightning-formatted-date-time>
-                                </div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Hora Entrada">Hora Entrada</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Hora_Entrada__c}>
-                                    <lightning-formatted-date-time value={row.Hora_Entrada__c} hour="2-digit"
-                                        minute="2-digit" time-zone="UTC" second="2-digit">
-                                    </lightning-formatted-date-time>
-                                </div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Hora Salida">Hora Salida</div>
                             </th>
-                            <th data-label="Name" scope="row">
-                                <div class="slds-truncate" title={row.Hora_Salida__c}>
-                                    <lightning-formatted-date-time value={row.Hora_Salida__c} hour="2-digit"
-                                        minute="2-digit" time-zone="UTC" second="2-digit" >
-                                    </lightning-formatted-date-time>
-                                </div>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Responsable">Responsable</div>
                             </th>
-                            <td>
-                                <lightning-button value={index} variant="brand" label="Delete Row" onclick={removeRow}>
-                                </lightning-button>
-                            </td>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Pase">Pase</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Email">Acciones</div>
+                            </th>
                         </tr>
-                    </tbody>
-                </template>
-            </table>
+                    </thead>
+                    <template for:each={visitas.data} for:item="row" for:index="index">
+                        <tbody key={row.id}>
+                            <tr class="slds-hint-parent">
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.Name}>{row.Name} &nbsp; {row.Apellidos__c}
+                                    </div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.Telefono__c}>{row.Telefono__c}</div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.Email_Visita__c}>{row.Email_Visita__c}</div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.CI__c}>{row.CI__c}</div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.Fecha_Visita__c}>
+                                        <lightning-formatted-date-time value={row.Fecha_Visita__c} year="numeric"
+                                            month="numeric" day="numeric" time-zone="UTC">
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.Hora_Entrada__c}>
+                                        <lightning-formatted-date-time value={row.Hora_Entrada__c} hour="2-digit"
+                                            minute="2-digit" time-zone="UTC" second="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.Hora_Salida__c}>
+                                        <lightning-formatted-date-time value={row.Hora_Salida__c} hour="2-digit"
+                                            minute="2-digit" time-zone="UTC" second="2-digit">
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <template for:each={row.Rel_Visita_Responsables__r} for:item="resp"
+                                        for:index="index">
+                                        <div key={resp.Id} class="slds-truncate" title={resp.idResponsable__r.Name}>
+                                            {resp.idResponsable__r.Name} <br /></div>
+                                    </template>
+                                </th>
+                                <th data-label="Name" scope="row">
+                                    <div class="slds-truncate" title={row.idIdentificacion__r.Name}>
+                                        {row.idIdentificacion__r.Name}</div>
+                                </th>
+                                <td>
+                                    <lightning-button-icon value={row.Id} icon-name="utility:delete"
+                                        onclick={removeVisita} alternative-text="Eliminar Visita"
+                                        class="slds-m-left_xx-small">
+                                    </lightning-button-icon>
+                                    <lightning-button-icon value={row.Id} icon-name="utility:edit" onclick={editVisita}
+                                        alternative-text="Editar Visita" class="slds-m-left_xx-small">
+                                    </lightning-button-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </table>
+            </template>
         </div>
     </lightning-card>
 </template>

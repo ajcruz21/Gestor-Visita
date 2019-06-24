@@ -1,7 +1,8 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class Modal extends LightningElement {
-
+    @api idVisita;
+    
     handleCerrarModal() {
         const closeModal = new CustomEvent('closemodal', {
             show: false
@@ -9,9 +10,19 @@ export default class Modal extends LightningElement {
         this.dispatchEvent(closeModal);
     }
 
-    handleChekValues() {
-        const returnValue = this.template.querySelector('c-form-visita').handleFormValues('My param');   
+    handleChekAddValues() {
+        const returnValue = this.template.querySelector('c-form-visita').handleFormValues('new');
         console.log(returnValue)
+    }
+
+    handleChekEditValues() {
+        const returnValue = this.template.querySelector('c-form-visita').handleFormValues('new');
+        console.log(returnValue)
+    }
+
+    get getCloseButton() {
+        let css = 'slds-button slds-modal__close';
+        return css;
     }
 
 }

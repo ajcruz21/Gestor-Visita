@@ -4,17 +4,20 @@
             aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
             <div class="slds-modal__container">
                 <header class="slds-modal__header">
-                    <lightning-button-icon size="large" class="slds-button slds-modal__close buttonClose"
-                        icon-name="utility:close" variant="bare" onclick={handleCerrarModal} alternative-text="Cerrar">
-                    </lightning-button-icon>
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleCerrarModal} title="Cerrar">
+                        <lightning-icon size="small" icon-name="utility:close" alternative-text="Warning!"
+                            variant="inverse"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Visita</h2>
                 </header>
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                    <c-form-visita></c-form-visita>
+                    <c-form-visita id-visita={idVisita} onclosewindow={handleCerrarModal}></c-form-visita>
                 </div>
                 <footer class="slds-modal__footer">
                     <button class="slds-button slds-button_neutral" onclick={handleCerrarModal}>Cancelar</button>
-                    <button class="slds-button slds-button_brand" onclick={handleChekValues} >Salvar</button>
+                    <button class="slds-button slds-button_brand" onclick={handleChekAddValues}>Salvar</button>
                 </footer>
             </div>
         </section>

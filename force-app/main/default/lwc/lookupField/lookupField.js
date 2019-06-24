@@ -20,18 +20,14 @@ export default class LookupField extends LightningElement {
     @track fld_API_Val = 'Id';
     @api iconType;
     @api idDiv;
+    @api requiredField;
 
     cleanSearchTerm;
     blurTimeout;
     searchThrottlingTimeout;
-
-    // EXPOSED FUNCTIONS
-    connectedCallback() {
-        console.log(this.idDiv);
-    }
+  
     @api
-    setSearchResul(results) {
-        console.log(JSON.parse(JSON.stringify(results)));
+    setSearchResul(results) {        
         this.searchResults = results.map(result => {
             if (typeof result.icon === 'undefined') {
                 result.icon = 'standard:default';
@@ -144,8 +140,8 @@ export default class LookupField extends LightningElement {
         this.dispatchEvent(new CustomEvent('selectionchange'));
     }
 
-    handleComboboxClick() {
-        // Hide combobox immediatly
+    handleComboboxClick() {      
+        // Hide combobox immediatly        
         if (this.blurTimeout) {
             window.clearTimeout(this.blurTimeout);
         }
@@ -153,14 +149,14 @@ export default class LookupField extends LightningElement {
     }
 
     handleFocus() {
-        // Prevent action if selection is not allowed
+        // Prevent action if selection is not allowed       
         if (!this.isSelectionAllowed()) {
             return;
         }
         this.hasFocus = true;
-    }
+    }   
 
-    handleBlur() {
+    handleBlur() {          
         // Prevent action if selection is not allowed
         if (!this.isSelectionAllowed()) {
             return;
@@ -170,9 +166,12 @@ export default class LookupField extends LightningElement {
         this.blurTimeout = window.setTimeout(() => {
             this.hasFocus = false;
             this.blurTimeout = null;
+            
         },
             300
         );
+
+        
     }
 
     handleRemoveSelectedItem(event) {
@@ -185,10 +184,10 @@ export default class LookupField extends LightningElement {
     handleClearSelection() {
         this.selection = [];
         // Notify parent components that selection has changed
-        this.dispatchEvent(new CustomEvent('selectionchange'));
+        this.dispatchEvent(new CustomEvent('selectionchange'));        
     }
 
-
+    
     // STYLE EXPRESSIONS
 
     get getContainerClass() {

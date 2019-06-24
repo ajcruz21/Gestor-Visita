@@ -1,15 +1,11 @@
 public with sharing class VistaController {
     private final static Integer MAX_RESULTS = 5;
 
-    public VistaController() {
-
-    }
-
     @AuraEnabled(Cacheable=true)
     public static List<Visita__c> getAllVisita(){
     return [SELECT Id, Name, Apellidos__c, Descripcion__c, Email_Visita__c, Fecha_Visita__c,CI__c, 
-            Hora_Entrada__c, Hora_Salida__c, Raza__c,Telefono__c
-            FROM Visita__c ];  
+            Hora_Entrada__c, Hora_Salida__c, Raza__c,Telefono__c,idIdentificacion__r.Name,
+            (select idResponsable__r.Name from Rel_Visita_Responsables__r) FROM Visita__c ];  
     }   
 
     @AuraEnabled(Cacheable=true)
@@ -23,13 +19,22 @@ public with sharing class VistaController {
         searchTerm = '%'+ searchTerm +'%';
         // Execute search query
         return [SELECT Id, Name, Apellidos__c, Descripcion__c, Email_Visita__c, Fecha_Visita__c,CI__c, 
-            Hora_Entrada__c, Hora_Salida__c, Raza__c,Telefono__c FROM Visita__c  WHERE Name LIKE :searchTerm ORDER BY Name LIMIT 50];  
+            Hora_Entrada__c, Hora_Salida__c, Raza__c,Telefono__c, idIdentificacion__r.Name,
+            (select idResponsable__r.Name from Rel_Visita_Responsables__r) 
+            FROM Visita__c  WHERE Name LIKE :searchTerm ORDER BY Name LIMIT 50];  
     }
 
     @AuraEnabled
-    public static void crearVisita(Visita__c visita){
-        //system.debug()
-        insert visita;        
+    public static void crearVisita(Visita__c visita, List<String> responsables){      
+        List<Rel_Visita_Responsable__c> listRel = new List<Rel_Visita_Responsable__c>();
+        upsert visita;  
+        List<Rel_Visita_Responsable__c> listRelDel = [SELECT id FROM Rel_Visita_Responsable__c WHERE idVisita__c =: visita.Id];
+        delete listRelDel;
+        for (String  idResp: responsables) {
+            Rel_Visita_Responsable__c relNew = new Rel_Visita_Responsable__c(idResponsable__c=idResp , idVisita__c=visita.Id);
+            listRel.add(relNew);
+        } 
+        insert listRel;    
     }
 
     @AuraEnabled
@@ -56,6 +61,20 @@ public with sharing class VistaController {
         }        
         return results;
         
+    }
+
+    @AuraEnabled
+    public static void deleteVisita(String idVisita){
+        Visita__c visitaDel = [Select Name from Visita__c where id =: idVisita];
+        delete visitaDel;
+    }
+
+    @AuraEnabled
+    public static Visita__c getVisitById(String idVisita){
+        return [SELECT Id, Name, Apellidos__c, Descripcion__c, Email_Visita__c, Fecha_Visita__c,CI__c, 
+            Hora_Entrada__c, Hora_Salida__c, Raza__c,Telefono__c, idIdentificacion__r.Name,Sexo__c,tipoId__c,
+            (select idResponsable__r.Name from Rel_Visita_Responsables__r),Pertenecias__c,Primera_Impresion__c
+            FROM Visita__c  WHERE Id =: idVisita  LIMIT 1];  
     }
 
     

@@ -3,7 +3,7 @@ import { LightningElement, track, api } from 'lwc';
 const MINIMAL_SEARCH_TERM_LENGTH = 1; // Min number of chars required to search
 const SEARCH_DELAY = 300; // Wait 300 ms after user stops typing then, peform search
 
-export default class lookupFieldMultiple extends LightningElement {
+export default class MultipleSelect extends LightningElement {
 
     @api label;
     @api selection = [];
@@ -20,6 +20,7 @@ export default class lookupFieldMultiple extends LightningElement {
     @track fld_API_Text = 'Name';
     @track fld_API_Val = 'Id';
     @api iconType;
+    @api requiredField;
 
     cleanSearchTerm;
     blurTimeout;
@@ -29,7 +30,7 @@ export default class lookupFieldMultiple extends LightningElement {
 
     @api
     setSearchResults(results) {      
-        console.log(JSON.parse(JSON.stringify(results)));
+        //console.log(JSON.parse(JSON.stringify(results)));
         this.searchResults = results.map(result => {
             if (typeof result.icon === 'undefined') {
                 result.icon = 'standard:default';
@@ -39,7 +40,7 @@ export default class lookupFieldMultiple extends LightningElement {
     }
 
     @api
-    getSelection() {
+    getSelectionR() {
         return this.selection;
     }
 
@@ -274,4 +275,5 @@ export default class lookupFieldMultiple extends LightningElement {
     get isExpanded() {
         return this.hasResults();
     }
+    
 }
